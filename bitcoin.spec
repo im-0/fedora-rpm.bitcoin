@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -48,11 +48,7 @@ BuildRequires: qt5-qttools-devel
 BuildRequires: qt5-qtbase-devel
 BuildRequires: protobuf-devel
 BuildRequires: qrencode-devel
-
-BuildRequires:  %{_bindir}/desktop-file-validate
-
-# bump this when changing the desktop file
-%define desktopversion 201711141948
+BuildRequires: desktop-file-utils
 
 %description qt
 Bitcoin is a digital cryptographic currency that uses peer-to-peer technology to
@@ -86,12 +82,12 @@ that wants to link against that library, then you need this package installed.
 
 Most people do not need this package installed.
 
-%package daemon
+%package -n bitcoind
 Summary:        The bitcoin daemon
 Group:          System Environment/Daemons
-Requires:       bitcoin-utils = %{version}-%{release}
+Recommends:     bitcoin-cli = %{version}-%{release}
 
-%description daemon
+%description -n bitcoind
 This package provides a stand-alone bitcoin daemon. For most users, this
 package is only needed if they need a full-node without the graphical client.
 
@@ -101,11 +97,12 @@ bitcoin node they use to connect to the network.
 If you use the graphical bitcoin client then you almost certainly do not
 need this package.
 
-%package utils
+%package cli
 Summary:        Bitcoin utilities
 Group:          Applications/System
+Supplements:    bitcoind = %{version}-%{release}
 
-%description utils
+%description cli
 This package provides several command line utilities for interacting with a
 bitcoin daemon.
 
@@ -113,7 +110,7 @@ The bitcoin-cli utility allows you to communicate and control a bitcoin daemon
 over RPC, the bitcoin-tx utility allows you to create a custom transaction, and
 the bench_bitcoin utility can be used to perform some benchmarks.
 
-This package contains utilities needed by the bitcoin-daemon package.
+This package contains utilities frequently used with the bitcoind package.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -129,11 +126,8 @@ make check
 %install
 make install DESTDIR=%{buildroot}
 
-# no need to build debuginfo for these files!
-rm -f %{buildroot}%{_bindir}/test_bitcoin
-%if %{_buildqt}
-rm -f %{buildroot}%{_bindir}/test_bitcoin-qt
-%endif
+# no need to generate debuginfo data for the test executables
+rm -f %{buildroot}%{_bindir}/test_bitcoin*
 
 %if %{_buildqt}
 # qt icons
@@ -145,7 +139,7 @@ install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 # Desktop File - change the touch timestamp if modifying
 mkdir -p %{buildroot}%{_datadir}/applications
-cat <<EOF > %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
+cat <<EOF > bitcoin-qt.desktop
 [Desktop Entry]
 Version=1.0
 Name=Bitcoin Core
@@ -161,18 +155,15 @@ MimeType=x-scheme-handler/bitcoin;
 Categories=Office;Finance;
 StartupWMClass=Bitcoin-qt
 EOF
-# change touch date when modifying desktop
-touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
-%{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
+desktop-file-validate bitcoin-qt.desktop
+
+mkdir -p %{buildroot}%{_datadir}/applications/
+desktop-file-install bitcoin-qt.desktop
 %endif
 
 %post libs -p /sbin/ldconfig
 
 %postun libs -p /sbin/ldconfig
-
-%post qt -p %{_bindir}/update-desktop-database
-
-%postun qt -p  %{_bindir}/update-desktop-database
 
 %clean
 rm -rf %{buildroot}
@@ -207,14 +198,14 @@ rm -rf %{buildroot}
 %{_libdir}/*.la
 %attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
 
-%files daemon
+%files -n bitcoind
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/REST-interface.md doc/bips.md doc/dnsseed-policy.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
 %attr(0755,root,root) %{_bindir}/bitcoind
 %attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
 
-%files utils
+%files cli
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/benchmarking.md
@@ -225,6 +216,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-7
+- bitcoin-daemon -> bitcoind, bitcoin-utils -> bitcoin-cli
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-6
 - Fix the desktop file.
 
