@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -90,22 +90,15 @@ Most people do not need this package installed.
 Summary:        The bitcoin daemon
 Group:          System Environment/Daemons
 Requires:       bitcoin-utils = %{version}-%{release}
-Requires:       selinux-policy policycoreutils-python
-Requires(pre):  shadow-utils
-Requires(post): %{_sbindir}/semodule %{_sbindir}/restorecon %{_sbindir}/fixfiles %{_sbindir}/sestatus
-Requires(postun):       %{_sbindir}/semodule %{_sbindir}/restorecon %{_sbindir}/fixfiles %{_sbindir}/sestatus
-BuildRequires:  systemd
-BuildRequires:  checkpolicy
-BuildRequires:  %{_datadir}/selinux/devel/Makefile
 
 %description daemon
-This package provides a stand-alone bitcoin-core daemon. For most users, this
+This package provides a stand-alone bitcoin daemon. For most users, this
 package is only needed if they need a full-node without the graphical client.
 
 Some third party wallet software will want this package to provide the actual
-bitcoin-core node they use to connect to the network.
+bitcoin node they use to connect to the network.
 
-If you use the graphical bitcoin-core client then you almost certainly do not
+If you use the graphical bitcoin client then you almost certainly do not
 need this package.
 
 %package utils
@@ -114,7 +107,7 @@ Group:          Applications/System
 
 %description utils
 This package provides several command line utilities for interacting with a
-bitcoin-core daemon.
+bitcoin daemon.
 
 The bitcoin-cli utility allows you to communicate and control a bitcoin daemon
 over RPC, the bitcoin-tx utility allows you to create a custom transaction, and
@@ -244,6 +237,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-4
+- Split into subpackages.
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-3
 - Fix test_bitcoin logic, allow building without wallet.
 
