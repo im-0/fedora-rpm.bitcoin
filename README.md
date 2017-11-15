@@ -9,4 +9,4 @@ To enable the COPR:
 $ sudo dnf copr enable eklitzke/bitcoin
 ```
 
-Afterwards you should install at least one of `bitcoin-qt` or `bitcoin-daemon`.
+Afterwards you should install at least one of `bitcoin-qt` or `bitcoind`.
