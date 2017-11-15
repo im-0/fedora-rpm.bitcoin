@@ -15,8 +15,21 @@ BuildRequires: automake
 BuildRequires: openssl-devel
 BuildRequires: libevent-devel
 BuildRequires: boost-devel
+%if 0%{?!enable_wallet:1}
 BuildRequires: libdb4-devel
 BuildRequires: libdb4-cxx-devel
+%else
+%define walletargs --disable-wallet
+%endif
+%if 0%{?enable_gui}
+BuildRequires: qt5-qttools-devel
+BuildRequires: qt5-qtbase-devel
+BuildRequires: protobuf-devel
+BuildRequires: qrencode-devel
+%define guiargs --with-gui=qt5 --with-qrencode
+%else
+%define guiargs --with-gui=no
+%endif
 
 %description
 Bitcoin is a digital cryptographic currency that uses peer-to-peer technology to
@@ -28,11 +41,12 @@ issuing of bitcoins is carried out collectively by the network.
 
 %build
 ./autogen.sh
-%configure --disable-bench
+%configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
 %install
-%make_install
+make install DESTDIR=%{buildroot}
+rm -f %{buildroot}%{_bindir}/test_bitcoin
 
 %check
 make check
@@ -41,7 +55,7 @@ make check
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
-%{_bindir}/bitcoin*
+%{_bindir}/*
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_libdir}/*.so
