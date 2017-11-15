@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -107,8 +107,8 @@ This package provides several command line utilities for interacting with a
 bitcoin daemon.
 
 The bitcoin-cli utility allows you to communicate and control a bitcoin daemon
-over RPC, the bitcoin-tx utility allows you to create a custom transaction, and
-the bench_bitcoin utility can be used to perform some benchmarks.
+over RPC. The bitcoin-tx utility is also included, which allows you to create
+custom transactions.
 
 This package contains utilities frequently used with the bitcoind package.
 
@@ -117,7 +117,7 @@ This package contains utilities frequently used with the bitcoind package.
 
 %build
 ./autogen.sh
-%configure %{?walletargs} %{?guiargs}
+%configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
 %check
@@ -208,14 +208,16 @@ rm -rf %{buildroot}
 %files cli
 %defattr(-,root,root,-)
 %license COPYING
-%doc COPYING doc/README.md doc/benchmarking.md
+%doc COPYING doc/README.md
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
-%attr(0755,root,root) %{_bindir}/bench_bitcoin
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-cli.1*
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-8
+- Remove bench_bitcoin from the bitcoin-cli package.
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-7
 - bitcoin-daemon -> bitcoind, bitcoin-utils -> bitcoin-cli
 
