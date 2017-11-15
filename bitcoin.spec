@@ -1,6 +1,6 @@
 Name:    bitcoin
 Version: 0.15.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -65,6 +65,9 @@ make check
 %attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-3
+- Fix test_bitcoin logic, allow building without wallet.
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-2
 - Remove test_bitcoin executable from bindir.
 
