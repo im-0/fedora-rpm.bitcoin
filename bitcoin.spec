@@ -41,7 +41,7 @@ make check
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
-%{_bindir}/*
+%{_bindir}/bitcoin*
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_libdir}/*.so
