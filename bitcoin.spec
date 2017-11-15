@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -145,10 +145,12 @@ install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 # Desktop File - change the touch timestamp if modifying
 mkdir -p %{buildroot}%{_datadir}/applications
-cat <<EOF > %{buildroot}%{_datadir}/applications/bitcoin.desktop
+cat <<EOF > %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
 [Desktop Entry]
-Name=Bitcoin
-Comment=Bitcoin P2P Cryptocurrency
+Version=1.0
+Name=Bitcoin Core
+Comment=Connect to the Bitcoin P2P Network
+Comment[de]=Verbinde mit dem Bitcoin peer-to-peer Netzwerk
 Comment[fr]=Bitcoin, monnaie virtuelle cryptographique pair à pair
 Comment[tr]=Bitcoin, eşten eşe kriptografik sanal para birimi
 Exec=bitcoin-qt %u
@@ -157,33 +159,20 @@ Type=Application
 Icon=bitcoin128
 MimeType=x-scheme-handler/bitcoin;
 Categories=Office;Finance;
+StartupWMClass=Bitcoin-qt
 EOF
 # change touch date when modifying desktop
-touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/applications/bitcoin.desktop
-%{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/bitcoin.desktop
-
-# KDE protocol - change the touch timestamp if modifying
-mkdir -p %{buildroot}%{_datadir}/kde4/services
-cat <<EOF > %{buildroot}%{_datadir}/kde4/services/bitcoin.protocol
-[Protocol]
-exec=bitcoin-qt '%u'
-protocol=bitcoin
-input=none
-output=none
-helper=true
-listing=
-reading=false
-writing=false
-makedir=false
-deleting=false
-EOF
-# change touch date when modifying protocol
-touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/kde4/services/bitcoin.protocol
+touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
+%{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
 %endif
 
 %post libs -p /sbin/ldconfig
 
 %postun libs -p /sbin/ldconfig
+
+%post qt -p %{_bindir}/update-desktop-database
+
+%postun qt -p  %{_bindir}/update-desktop-database
 
 %clean
 rm -rf %{buildroot}
@@ -194,8 +183,7 @@ rm -rf %{buildroot}
 %license COPYING
 %doc COPYING doc/README.md doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
 %attr(0755,root,root) %{_bindir}/bitcoin-qt
-%attr(0644,root,root) %{_datadir}/applications/bitcoin.desktop
-%attr(0644,root,root) %{_datadir}/kde4/services/bitcoin.protocol
+%attr(0644,root,root) %{_datadir}/applications/bitcoin-qt.desktop
 %attr(0644,root,root) %{_datadir}/pixmaps/*.ico
 %attr(0644,root,root) %{_datadir}/pixmaps/*.bmp
 %attr(0644,root,root) %{_datadir}/pixmaps/*.png
@@ -237,6 +225,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-6
+- Fix the desktop file.
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-5
 - Don't depend on SELinux stuff, rename the .desktop file
 
