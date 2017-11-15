@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -145,7 +145,7 @@ install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 # Desktop File - change the touch timestamp if modifying
 mkdir -p %{buildroot}%{_datadir}/applications
-cat <<EOF > %{buildroot}%{_datadir}/applications/bitcoin-core.desktop
+cat <<EOF > %{buildroot}%{_datadir}/applications/bitcoin.desktop
 [Desktop Entry]
 Name=Bitcoin
 Comment=Bitcoin P2P Cryptocurrency
@@ -159,12 +159,12 @@ MimeType=x-scheme-handler/bitcoin;
 Categories=Office;Finance;
 EOF
 # change touch date when modifying desktop
-touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/applications/bitcoin-core.desktop
-%{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/bitcoin-core.desktop
+touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/applications/bitcoin.desktop
+%{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/bitcoin.desktop
 
 # KDE protocol - change the touch timestamp if modifying
 mkdir -p %{buildroot}%{_datadir}/kde4/services
-cat <<EOF > %{buildroot}%{_datadir}/kde4/services/bitcoin-core.protocol
+cat <<EOF > %{buildroot}%{_datadir}/kde4/services/bitcoin.protocol
 [Protocol]
 exec=bitcoin-qt '%u'
 protocol=bitcoin
@@ -178,7 +178,7 @@ makedir=false
 deleting=false
 EOF
 # change touch date when modifying protocol
-touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/kde4/services/bitcoin-core.protocol
+touch -a -m -t %{desktopversion} %{buildroot}%{_datadir}/kde4/services/bitcoin.protocol
 %endif
 
 %post libs -p /sbin/ldconfig
@@ -194,8 +194,8 @@ rm -rf %{buildroot}
 %license COPYING
 %doc COPYING doc/README.md doc/bips.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
 %attr(0755,root,root) %{_bindir}/bitcoin-qt
-%attr(0644,root,root) %{_datadir}/applications/bitcoin-core.desktop
-%attr(0644,root,root) %{_datadir}/kde4/services/bitcoin-core.protocol
+%attr(0644,root,root) %{_datadir}/applications/bitcoin.desktop
+%attr(0644,root,root) %{_datadir}/kde4/services/bitcoin.protocol
 %attr(0644,root,root) %{_datadir}/pixmaps/*.ico
 %attr(0644,root,root) %{_datadir}/pixmaps/*.bmp
 %attr(0644,root,root) %{_datadir}/pixmaps/*.png
@@ -229,7 +229,7 @@ rm -rf %{buildroot}
 %files utils
 %defattr(-,root,root,-)
 %license COPYING
-%doc COPYING doc/README.md
+%doc COPYING doc/README.md doc/benchmarking.md
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0755,root,root) %{_bindir}/bench_bitcoin
@@ -237,6 +237,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 
 %changelog
+* Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-5
+- Don't depend on SELinux stuff, rename the .desktop file
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-4
 - Split into subpackages.
 
