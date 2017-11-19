@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -23,6 +23,7 @@ Source0: https://github.com/bitcoin/%{name}/archive/v%{version}/%{name}-%{versio
 
 Source10: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin.conf
 Source11: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoind.service
+Source12: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin-qt.desktop
 
 BuildRequires: gcc-c++
 BuildRequires: libtool
@@ -88,32 +89,18 @@ Most people do not need this package installed.
 %package -n bitcoind
 Summary:        The bitcoin daemon
 Group:          System Environment/Daemons
-Recommends:     bitcoin-cli = %{version}-%{release}
 
 %description -n bitcoind
-This package provides a stand-alone bitcoin daemon. For most users, this
-package is only needed if they need a full-node without the graphical client.
+This package provides a stand-alone bitcoin daemon. For most users, this package
+is only needed if they need a full-node without the graphical client. This
+package will also install command line programs such as bitcoin-cli to interact
+with the daemon, and bitcoin-tx for creating custom transactions.
 
 Some third party wallet software will want this package to provide the actual
 bitcoin node they use to connect to the network.
 
 If you use the graphical bitcoin client then you almost certainly do not
 need this package.
-
-%package cli
-Summary:        Bitcoin utilities
-Group:          Applications/System
-Supplements:    bitcoind = %{version}-%{release}
-
-%description cli
-This package provides several command line utilities for interacting with a
-bitcoin daemon.
-
-The bitcoin-cli utility allows you to communicate and control a bitcoin daemon
-over RPC. The bitcoin-tx utility is also included, which allows you to create
-custom transactions.
-
-This package contains utilities frequently used with the bitcoind package.
 
 %prep
 %autosetup -n %{name}-%{version}
@@ -140,9 +127,19 @@ install -p share/pixmaps/*.xpm %{buildroot}%{_datadir}/pixmaps/
 install -p share/pixmaps/*.ico %{buildroot}%{_datadir}/pixmaps/
 install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
-# Desktop File - change the touch timestamp if modifying
+mkdir -p %{buildroot}%{_datadir}/bitcoin
+install -p share/rpcuser/rpcuser.py %{buildroot}/%{_datadir}/bitcoin/rpcuser.py
+
+mkdir -p %{buildroot}%{_sharedstatedir}/bitcoin
+
+mkdir -p %{buildroot}%{_sysconfdir}/bitcoin
+install -p %{SOURCE10} %{buildroot}%{_sysconfdir}/bitcoin/bitcoin.conf
+
+mkdir -p %{buildroot}%{_unitdir}
+install -p %{SOURCE11} %{buildroot}%{_unitdir}/bitcoind.service
+
 mkdir -p %{buildroot}%{_datadir}/applications
-desktop-file-install %{SOURCE11}/bitcoin-qt.desktop
+desktop-file-install %{SOURCE12} %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
 %endif
 
 %post libs -p /sbin/ldconfig
@@ -152,20 +149,20 @@ desktop-file-install %{SOURCE11}/bitcoin-qt.desktop
 %pre -n bitcoind
 getent group bitcoin >/dev/null || groupadd -r bitcoin
 getent passwd bitcoin >/dev/null ||
-	useradd -r -g bitcoin -d /var/lib/bitcoin -s /sbin/nologin \
+	useradd -r -g bitcoin -d %{_sharedstatedir}/bitcoin -s /sbin/nologin \
 	-c "Bitcoin wallet server" bitcoin
 
 %post -n bitcoind
-%systemd_post bitcoin.service
+%systemd_post bitcoind.service
 
 %posttrans -n bitcoind
 %{_bindir}/systemd-tmpfiles --create
 
 %preun -n bitcoind
-%systemd_preun bitcoin.service
+%systemd_preun bitcoind.service
 
 %postun -n bitcoind
-%systemd_postun bitcoin.service
+%systemd_postun bitcoind.service
 
 %clean
 rm -rf %{buildroot}
@@ -204,19 +201,25 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/REST-interface.md doc/bips.md doc/dnsseed-policy.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
-%attr(0755,root,root) %{_bindir}/bitcoind
-%attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
-
-%files cli
-%defattr(-,root,root,-)
-%license COPYING
-%doc COPYING doc/README.md
-%attr(0755,root,root) %{_bindir}/bitcoin-cli
-%attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-cli.1*
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
+%attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
+%attr(0644,root,root) %{_unitdir}/bitcoind.service
+%attr(0700,bitcoin,bitcoin) %{_sysconfdir}/bitcoin
+%attr(0600,bitcoin,bitcoin) %{_sysconfdir}/bitcoin/bitcoin.conf
+%attr(0700,bitcoin,bitcoin) %{_sharedstatedir}/bitcoin
+%attr(0755,root,root) %{_bindir}/bitcoin-cli
+%attr(0755,root,root) %{_bindir}/bitcoin-tx
+%attr(0755,root,root) %{_bindir}/bitcoind
+%attr(0644,root,root) %{_datadir}/bitcoin/rpcuser.py
+%exclude %{_datadir}/bitcoin/*.pyc
+%exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sun Nov 19 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-9
+- Remove bitcoin-cli package (move those to bitcoind)
+- Set up a real system service for bitcoind
+
 * Wed Nov 15 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-8
 - Remove bench_bitcoin from the bitcoin-cli package.
 

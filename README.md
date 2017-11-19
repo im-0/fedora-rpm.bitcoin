@@ -10,3 +10,36 @@ $ sudo dnf copr enable eklitzke/bitcoin
 ```
 
 Afterwards you should install at least one of `bitcoin-qt` or `bitcoind`.
+
+If you choose to use `bitcoind`, note that by default it sets up a system-wide
+installation with the following characteristics:
+
+ * A `bitcoin` user/group is created
+ * A systemd service called `bitcoind.service` becomes available
+ * The service is configured to read its config from `/etc/bitcoin/bitcoin.conf`
+ * The service is configured to use `/var/lib/bitcoin` as its datadir
+
+If you would like to use `bitcoin-cli` as another user (say, your own user) you
+need to create RPC credentials using a provided script. To run the script for an
+RPC user named `alice` you run:
+
+```bash
+# Create RPC credentials for alice
+$ python /usr/share/bitcoin/rpcuser.py alice
+```
+
+This will print out an `rpcauth=...` line, which you should add to
+`/etc/bitcoin/bitcoin.conf`. It will also print out a password.
+
+Create a `~/.bitcoin` directory that is only readable by yourself:
+
+```bash
+$ mkdir ~/.bitcoin
+$ chmod 700 ~/.bitcoin
+$ touch ~/.bitcoin/bitcoin.conf
+$ chmod 600 ~/.bitcoin/bitcoin.conf
+$ echo >> ~/.bitcoin/bitcoin.conf <<EOF
+rpcuser=alice
+rpcpassword=the-password-from-rpcuser.py
+EOF
+```
