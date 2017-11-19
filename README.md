@@ -9,7 +9,8 @@ To enable the COPR:
 $ sudo dnf copr enable eklitzke/bitcoin
 ```
 
-Afterwards you should install at least one of `bitcoin-qt` or `bitcoind`.
+Afterwards you should install the `bitcoin-qt` for the graphical program, or
+`bitcoind` for the daemon/command line interface.
 
 If you choose to use `bitcoind`, note that by default it sets up a system-wide
 installation with the following characteristics:
@@ -29,15 +30,12 @@ $ python /usr/share/bitcoin/rpcuser.py alice
 ```
 
 This will print out an `rpcauth=...` line, which you should add to
-`/etc/bitcoin/bitcoin.conf`. It will also print out a password.
-
-Create a `~/.bitcoin` directory that is only readable by yourself:
+`/etc/bitcoin/bitcoin.conf`. It will also print out a password. Use this
+password to create a file named `~/.bitcoin/bitcoin.conf` with your credentials:
 
 ```bash
-$ mkdir ~/.bitcoin
+$ test -d ~/.bitcoin || mkdir ~/.bitcoin
 $ chmod 700 ~/.bitcoin
-$ touch ~/.bitcoin/bitcoin.conf
-$ chmod 600 ~/.bitcoin/bitcoin.conf
 $ echo >> ~/.bitcoin/bitcoin.conf <<EOF
 rpcuser=alice
 rpcpassword=the-password-from-rpcuser.py
