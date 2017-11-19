@@ -21,6 +21,9 @@ License: MIT
 URL:     https://bitcoin.org/
 Source0: https://github.com/bitcoin/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
+Source10: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin.conf
+Source11: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoind.service
+
 BuildRequires: gcc-c++
 BuildRequires: libtool
 BuildRequires: make
@@ -139,31 +142,30 @@ install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 # Desktop File - change the touch timestamp if modifying
 mkdir -p %{buildroot}%{_datadir}/applications
-cat <<EOF > bitcoin-qt.desktop
-[Desktop Entry]
-Version=1.0
-Name=Bitcoin Core
-Comment=Connect to the Bitcoin P2P Network
-Comment[de]=Verbinde mit dem Bitcoin peer-to-peer Netzwerk
-Comment[fr]=Bitcoin, monnaie virtuelle cryptographique pair à pair
-Comment[tr]=Bitcoin, eşten eşe kriptografik sanal para birimi
-Exec=bitcoin-qt %u
-Terminal=false
-Type=Application
-Icon=bitcoin128
-MimeType=x-scheme-handler/bitcoin;
-Categories=Office;Finance;
-StartupWMClass=Bitcoin-qt
-EOF
-desktop-file-validate bitcoin-qt.desktop
-
-mkdir -p %{buildroot}%{_datadir}/applications/
-desktop-file-install bitcoin-qt.desktop
+desktop-file-install %{SOURCE11}/bitcoin-qt.desktop
 %endif
 
 %post libs -p /sbin/ldconfig
 
 %postun libs -p /sbin/ldconfig
+
+%pre -n bitcoind
+getent group bitcoin >/dev/null || groupadd -r bitcoin
+getent passwd bitcoin >/dev/null ||
+	useradd -r -g bitcoin -d /var/lib/bitcoin -s /sbin/nologin \
+	-c "Bitcoin wallet server" bitcoin
+
+%post -n bitcoind
+%systemd_post bitcoin.service
+
+%posttrans -n bitcoind
+%{_bindir}/systemd-tmpfiles --create
+
+%preun -n bitcoind
+%systemd_preun bitcoin.service
+
+%postun -n bitcoind
+%systemd_postun bitcoin.service
 
 %clean
 rm -rf %{buildroot}
