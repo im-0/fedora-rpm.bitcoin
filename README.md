@@ -38,10 +38,19 @@ This will print out an `rpcauth=...` line, which you should add to
 password to create a file named `~/.bitcoin/bitcoin.conf` with your credentials:
 
 ```bash
-$ test -d ~/.bitcoin || mkdir ~/.bitcoin
-$ chmod 700 ~/.bitcoin
+$ mkdir -m 700 ~/.bitcoin
 $ cat <<EOF > ~/.bitcoin/bitcoin.conf
 rpcuser=alice
 rpcpassword=the-password-from-rpcuser.py
 EOF
+```
+
+If everything worked correctly, once you start the service (`systemctl start
+bitcoind`) you should be able to run commands like `bitcoin-cli uptime` without
+error. If you're bootstrapping the node, you may find the following command
+helpful to check its progress (as a value from 0 to 1):
+
+```bash
+# Check progress of initial blockchain sync.
+$ bitcoin-cli getblockchaininfo | jq .verificationprogress -
 ```
