@@ -3,7 +3,8 @@ contrib directory. The main difference between this spec and the one in contrib
 is that this version is less heavily modified, e.g. it doesn't install SELinux
 rules or try to create system directories.
 
-To enable the COPR:
+To enable the [eklitzke/bitcoin
+COPR](https://copr.fedorainfracloud.org/coprs/eklitzke/bitcoin/):
 
 ```bash
 $ sudo dnf copr enable eklitzke/bitcoin
