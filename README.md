@@ -1,10 +1,13 @@
-A spec file for Bitcoin. The work here is based on the spec file in the Bitcoin
-contrib directory. The main difference between this spec and the one in contrib
-is that this version is less heavily modified, e.g. it doesn't install SELinux
-rules or try to create system directories.
+A spec file for Bitcoin Core. The work here is based on the spec file in the
+Bitcoin contrib directory. The main difference between this spec and the one in
+contrib is that this version is less heavily modified, e.g. it doesn't install
+SELinux rules or try to create system directories.
 
-To enable the [eklitzke/bitcoin
-COPR](https://copr.fedorainfracloud.org/coprs/eklitzke/bitcoin/):
+I have created a COPR called
+[eklitzke/bitcoin](https://copr.fedorainfracloud.org/coprs/eklitzke/bitcoin/),
+with pre-built RPM packages built from this spec file. I would recommend using
+the packages built there, unless you would like to actually modify the spec
+file. To enable the COPR:
 
 ```bash
 $ sudo dnf copr enable eklitzke/bitcoin
