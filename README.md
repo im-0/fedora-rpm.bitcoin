@@ -36,7 +36,7 @@ password to create a file named `~/.bitcoin/bitcoin.conf` with your credentials:
 ```bash
 $ test -d ~/.bitcoin || mkdir ~/.bitcoin
 $ chmod 700 ~/.bitcoin
-$ echo >> ~/.bitcoin/bitcoin.conf <<EOF
+$ cat <<EOF > ~/.bitcoin/bitcoin.conf
 rpcuser=alice
 rpcpassword=the-password-from-rpcuser.py
 EOF
