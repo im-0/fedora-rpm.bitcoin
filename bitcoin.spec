@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -211,10 +211,14 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0755,root,root) %{_bindir}/bitcoind
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcuser.py
+%config(noreplace) %{_sysconfdir}/bitcoin.conf
 %exclude %{_datadir}/bitcoin/*.pyc
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Mon Nov 20 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-11
+- Mark /etc/bitcoin.conf as a (noreplace) config file
+
 * Sun Nov 19 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-10
 - Just use /etc/bitcoin.conf, a whole new dir seems unnecessary
 
