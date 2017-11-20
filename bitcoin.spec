@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -132,8 +132,8 @@ install -p share/rpcuser/rpcuser.py %{buildroot}/%{_datadir}/bitcoin/rpcuser.py
 
 mkdir -p %{buildroot}%{_sharedstatedir}/bitcoin
 
-mkdir -p %{buildroot}%{_sysconfdir}/bitcoin
-install -p %{SOURCE10} %{buildroot}%{_sysconfdir}/bitcoin/bitcoin.conf
+mkdir -p %{buildroot}%{_sysconfdir}
+install -p %{SOURCE10} %{buildroot}%{_sysconfdir}/bitcoin.conf
 
 mkdir -p %{buildroot}%{_unitdir}
 install -p %{SOURCE11} %{buildroot}%{_unitdir}/bitcoind.service
@@ -205,8 +205,7 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 %attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
 %attr(0644,root,root) %{_unitdir}/bitcoind.service
-%attr(0700,bitcoin,bitcoin) %{_sysconfdir}/bitcoin
-%attr(0600,bitcoin,bitcoin) %{_sysconfdir}/bitcoin/bitcoin.conf
+%attr(0644,root,root) %{_sysconfdir}/bitcoin.conf
 %attr(0700,bitcoin,bitcoin) %{_sharedstatedir}/bitcoin
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
@@ -216,6 +215,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sun Nov 19 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-10
+- Just use /etc/bitcoin.conf, a whole new dir seems unnecessary
+
 * Sun Nov 19 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-9
 - Remove bitcoin-cli package (move those to bitcoind)
 - Set up a real system service for bitcoind
