@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -24,6 +24,7 @@ Source0: https://github.com/bitcoin/%{name}/archive/v%{version}/%{name}-%{versio
 Source10: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin.conf
 Source11: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoind.service
 Source12: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin-qt.desktop
+Source13: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin-qt-testnet.desktop
 
 BuildRequires: gcc-c++
 BuildRequires: libtool
@@ -61,6 +62,17 @@ issuing of bitcoins is carried out collectively by the network.
 
 This package contains the Qt based graphical client and node. If you are looking
 to run a Bitcoin wallet, this is probably the package you want.
+
+%package qt-testnet
+Summary:        Peer to Peer Cryptographic Currency
+Group:          Applications/System
+Requires:       %{name}-qt = %{version}-%{release}
+
+%description qt-testnet
+
+This package provides a .desktop file that launches the Bitcoin Qt client in
+testnet mode.
+
 %endif
 
 %package libs
@@ -140,6 +152,7 @@ install -p %{SOURCE11} %{buildroot}%{_unitdir}/bitcoind.service
 
 mkdir -p %{buildroot}%{_datadir}/applications
 desktop-file-install %{SOURCE12} %{buildroot}%{_datadir}/applications/bitcoin-qt.desktop
+desktop-file-install %{SOURCE13} %{buildroot}%{_datadir}/applications/bitcoin-qt-testnet.desktop
 %endif
 
 %post libs -p /sbin/ldconfig
@@ -148,9 +161,9 @@ desktop-file-install %{SOURCE12} %{buildroot}%{_datadir}/applications/bitcoin-qt
 
 %pre -n bitcoind
 getent group bitcoin >/dev/null || groupadd -r bitcoin
-getent passwd bitcoin >/dev/null ||
-	useradd -r -g bitcoin -d %{_sharedstatedir}/bitcoin -s /sbin/nologin \
-	-c "Bitcoin wallet server" bitcoin
+getent passwd bitcoin >/dev/null ||\
+  useradd -r -g bitcoin -d %{_sharedstatedir}/bitcoin -s /sbin/nologin \
+  -c "Bitcoin wallet server" bitcoin
 
 %post -n bitcoind
 %systemd_post bitcoind.service
@@ -179,6 +192,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/pixmaps/*.png
 %attr(0644,root,root) %{_datadir}/pixmaps/*.xpm
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-qt.1*
+
+%files qt-testnet
+%attr(0644,root,root) %{_datadir}/applications/bitcoin-qt-testnet.desktop
 %endif
 
 %files libs
@@ -216,6 +232,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Wed Nov 29 2017 Evan Klitzke <evan@eklitzke.org>
+- Add .desktop file for bitcoin-qt testnet
+
 * Mon Nov 20 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-11
 - Mark /etc/bitcoin.conf as a (noreplace) config file
 
