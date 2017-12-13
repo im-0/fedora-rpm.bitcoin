@@ -13,6 +13,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/bitcoind -daemon -conf=/etc/bitcoin.conf -datadir=/var/lib/bitcoin -pid=/run/bitcoind/bitcoind.pid
+ExecStop=/usr/bin/bitcoin-cli stop
 # Creates /run/bitcoind owned by bitcoin
 RuntimeDirectory=bitcoind
 User=bitcoin
