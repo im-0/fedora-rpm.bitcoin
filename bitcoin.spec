@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.15.1
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -232,6 +232,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Wed Dec 13 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-13
+- Configure systemd to use bitcoin-cli stop to shutdown bitcoind
+
 * Wed Nov 29 2017 Evan Klitzke <evan@eklitzke.org>
 - Add .desktop file for bitcoin-qt testnet
 
