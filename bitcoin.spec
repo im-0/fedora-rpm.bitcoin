@@ -13,13 +13,8 @@
 %endif
 
 Name:    bitcoin
-<<<<<<< HEAD
-Version: 0.15.1
-Release: 13%{?dist}
-=======
 Version: 0.16.0rc1
 Release: 1%{?dist}
->>>>>>> create build for 0.16
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
