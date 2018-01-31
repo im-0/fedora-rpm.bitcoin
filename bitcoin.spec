@@ -140,7 +140,7 @@ install -p share/pixmaps/*.ico %{buildroot}%{_datadir}/pixmaps/
 install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 mkdir -p %{buildroot}%{_datadir}/bitcoin
-install -p share/rpcuser/rpcuser.py %{buildroot}/%{_datadir}/bitcoin/rpcuser.py
+install -p share/rpcauth/rpcauth.py %{buildroot}/%{_datadir}/bitcoin/rpcauth.py
 
 mkdir -p %{buildroot}%{_sharedstatedir}/bitcoin
 
@@ -175,7 +175,7 @@ getent passwd bitcoin >/dev/null ||\
 %systemd_preun bitcoind.service
 
 %postun -n bitcoind
-%systemd_postun bitcoind.service
+%systemd_postun_with_restart bitcoind.service
 
 %clean
 rm -rf %{buildroot}
@@ -226,7 +226,7 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0755,root,root) %{_bindir}/bitcoind
-%attr(0644,root,root) %{_datadir}/bitcoin/rpcuser.py
+%attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 %config(noreplace) %{_sysconfdir}/bitcoin.conf
 %exclude %{_datadir}/bitcoin/*.pyc
 %exclude %{_datadir}/bitcoin/*.pyo
