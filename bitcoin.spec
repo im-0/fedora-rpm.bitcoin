@@ -13,8 +13,13 @@
 %endif
 
 Name:    bitcoin
+<<<<<<< HEAD
 Version: 0.15.1
 Release: 13%{?dist}
+=======
+Version: 0.16.0rc1
+Release: 1%{?dist}
+>>>>>>> create build for 0.16
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -232,6 +237,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Wed Jan 31 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc1-1
+- rebuilt for 0.16
+
 * Wed Dec 13 2017 Evan Klitzke <evan@eklitzke.org> - 0.15.1-13
 - Configure systemd to use bitcoin-cli stop to shutdown bitcoind
 
