@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.16.0rc3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -118,6 +118,7 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
+test -f ./configure || ./autogen.sh
 %configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
@@ -224,6 +225,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sat Feb 10 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc3-2
+- Fix for GitHub tarballs (not created with "make dist")
+
 * Sat Feb 10 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc3-1
 - rebuilt for rc3
 
