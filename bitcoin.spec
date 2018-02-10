@@ -13,7 +13,7 @@
 %endif
 
 Name:    bitcoin
-Version: 0.16.0rc1
+Version: 0.16.0rc3
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -118,7 +118,6 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
-./autogen.sh
 %configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
@@ -134,10 +133,6 @@ rm -f %{buildroot}%{_bindir}/test_bitcoin*
 %if %{_buildqt}
 # qt icons
 install -D -p share/pixmaps/bitcoin.ico %{buildroot}%{_datadir}/pixmaps/bitcoin.ico
-install -p share/pixmaps/*.png %{buildroot}%{_datadir}/pixmaps/
-install -p share/pixmaps/*.xpm %{buildroot}%{_datadir}/pixmaps/
-install -p share/pixmaps/*.ico %{buildroot}%{_datadir}/pixmaps/
-install -p share/pixmaps/*.bmp %{buildroot}%{_datadir}/pixmaps/
 
 mkdir -p %{buildroot}%{_datadir}/bitcoin
 install -p share/rpcauth/rpcauth.py %{buildroot}/%{_datadir}/bitcoin/rpcauth.py
@@ -188,9 +183,6 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_bindir}/bitcoin-qt
 %attr(0644,root,root) %{_datadir}/applications/bitcoin-qt.desktop
 %attr(0644,root,root) %{_datadir}/pixmaps/*.ico
-%attr(0644,root,root) %{_datadir}/pixmaps/*.bmp
-%attr(0644,root,root) %{_datadir}/pixmaps/*.png
-%attr(0644,root,root) %{_datadir}/pixmaps/*.xpm
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-qt.1*
 
 %files qt-testnet
@@ -232,6 +224,12 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sat Feb 10 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc3-1
+- rebuilt for rc3
+
+* Mon Feb 05 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc2-2
+- rebuilt
+
 * Wed Jan 31 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc1-1
 - rebuilt for 0.16
 
