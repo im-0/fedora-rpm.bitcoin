@@ -13,8 +13,8 @@
 %endif
 
 Name:    bitcoin
-Version: 0.16.0rc3
-Release: 2%{?dist}
+Version: 0.16.0rc4
+Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -225,6 +225,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Fri Feb 16 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc4-1
+- rebuild for rc4
+
 * Sat Feb 10 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc3-2
 - Fix for GitHub tarballs (not created with "make dist")
 
