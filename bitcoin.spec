@@ -13,7 +13,7 @@
 %endif
 
 Name:    bitcoin
-Version: 0.16.0rc4
+Version: 0.16.0
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -225,6 +225,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Fri Feb 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-1
+- new version
+
 * Fri Feb 16 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc4-1
 - rebuild for rc4
 
