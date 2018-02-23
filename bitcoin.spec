@@ -14,7 +14,7 @@
 
 Name:    bitcoin
 Version: 0.16.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -101,6 +101,7 @@ Most people do not need this package installed.
 %package -n bitcoind
 Summary:        The bitcoin daemon
 Group:          System Environment/Daemons
+BuildRequires:  systemd
 
 %description -n bitcoind
 This package provides a stand-alone bitcoin daemon. For most users, this package
@@ -225,8 +226,11 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Fri Feb 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-2
+- Add BuildRequires: systemd for F28/Rawhide
+
 * Fri Feb 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-1
-- new version
+- Bump for official 0.16.0 release
 
 * Fri Feb 16 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0rc4-1
 - rebuild for rc4
