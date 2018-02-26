@@ -14,12 +14,12 @@
 
 Name:    bitcoin
 Version: 0.16.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
-URL:     https://bitcoin.org/
-Source0: https://github.com/bitcoin/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:     https://bitcoincore.org/
+Source0: https://bitcoincore.org/bin/%{name}-core-%{version}/%{name}-%{version}.tar.gz
 
 Source10: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin.conf
 Source11: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoind.service
@@ -69,7 +69,6 @@ Group:          Applications/System
 Requires:       %{name}-qt = %{version}-%{release}
 
 %description qt-testnet
-
 This package provides a .desktop file that launches the Bitcoin Qt client in
 testnet mode.
 
@@ -98,16 +97,23 @@ that wants to link against that library, then you need this package installed.
 
 Most people do not need this package installed.
 
+%package -n bitcoin-cli
+Summary:        CLI utils for bitcoin
+Group:          Applications/System
+
+%description -n bitcoin-cli
+This package installs command line programs like bitcoin-cli and bitcoin-tx that
+can be used to interact with the bitcoin daemon.
+
 %package -n bitcoind
 Summary:        The bitcoin daemon
 Group:          System Environment/Daemons
 BuildRequires:  systemd
+Requires:       bitcoin-cli = %{version}-%{release}
 
 %description -n bitcoind
 This package provides a stand-alone bitcoin daemon. For most users, this package
-is only needed if they need a full-node without the graphical client. This
-package will also install command line programs such as bitcoin-cli to interact
-with the daemon, and bitcoin-tx for creating custom transactions.
+is only needed if they need a full-node without the graphical client.
 
 Some third party wallet software will want this package to provide the actual
 bitcoin node they use to connect to the network.
@@ -119,7 +125,6 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
-test -f ./configure || ./autogen.sh
 %configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
@@ -207,18 +212,22 @@ rm -rf %{buildroot}
 %{_libdir}/*.la
 %attr(0644,root,root) %{_libdir}/pkgconfig/*.pc
 
+%files -n bitcoin-cli
+%defattr(-,root,root,-)
+%license COPYING
+%attr(0644,root,root) %{_mandir}/man1/bitcoin-cli.1*
+%attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
+%attr(0755,root,root) %{_bindir}/bitcoin-cli
+%attr(0755,root,root) %{_bindir}/bitcoin-tx
+
 %files -n bitcoind
 %defattr(-,root,root,-)
 %license COPYING
 %doc COPYING doc/README.md doc/REST-interface.md doc/bips.md doc/dnsseed-policy.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
-%attr(0644,root,root) %{_mandir}/man1/bitcoin-cli.1*
-%attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 %attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
 %attr(0644,root,root) %{_unitdir}/bitcoind.service
 %attr(0644,root,root) %{_sysconfdir}/bitcoin.conf
 %attr(0700,bitcoin,bitcoin) %{_sharedstatedir}/bitcoin
-%attr(0755,root,root) %{_bindir}/bitcoin-cli
-%attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0755,root,root) %{_bindir}/bitcoind
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 %config(noreplace) %{_sysconfdir}/bitcoin.conf
@@ -226,6 +235,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Mon Feb 26 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-3
+- split out bitcoin-cli package
+
 * Fri Feb 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-2
 - Add BuildRequires: systemd for F28/Rawhide
 
