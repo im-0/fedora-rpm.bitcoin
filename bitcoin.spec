@@ -13,8 +13,8 @@
 %endif
 
 Name:    bitcoin
-Version: 0.16.0
-Release: 3%{?dist}
+Version: 0.17.0
+Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -235,6 +235,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Tue Oct 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.17.0-1
+- Update for Bitcoin 0.17.0
+
 * Mon Feb 26 2018 Evan Klitzke <evan@eklitzke.org> - 0.16.0-3
 - split out bitcoin-cli package
 
