@@ -13,7 +13,7 @@
 %endif
 
 Name:    bitcoin
-Version: 0.17.0
+Version: 0.17.1
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -21,10 +21,10 @@ License: MIT
 URL:     https://bitcoincore.org/
 Source0: https://bitcoincore.org/bin/%{name}-core-%{version}/%{name}-%{version}.tar.gz
 
-Source10: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin.conf
-Source11: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoind.service
-Source12: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin-qt.desktop
-Source13: https://raw.githubusercontent.com/eklitzke/bitcoin-copr/master/bitcoin-qt-testnet.desktop
+Source10: bitcoin.conf
+Source11: bitcoind.service
+Source12: bitcoin-qt.desktop
+Source13: bitcoin-qt-testnet.desktop
 
 BuildRequires: gcc-c++
 BuildRequires: libtool
@@ -235,6 +235,9 @@ rm -rf %{buildroot}
 %exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sat Mar 16 2019 Evan Klitzke <evan@eklitzke.org> - 0.17.1-1
+- Update for Bitcoin 0.17.1
+
 * Tue Oct 23 2018 Evan Klitzke <evan@eklitzke.org> - 0.17.0-1
 - Update for Bitcoin 0.17.0
 
