@@ -229,11 +229,10 @@ rm -rf %{buildroot}
 %doc COPYING doc/README.md doc/REST-interface.md doc/bips.md doc/dnsseed-policy.md doc/files.md doc/reduce-traffic.md doc/release-notes.md doc/tor.md
 %attr(0644,root,root) %{_mandir}/man1/bitcoind.1*
 %attr(0644,root,root) %{_unitdir}/bitcoind.service
-%attr(0644,root,root) %{_sysconfdir}/bitcoin.conf
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/bitcoin.conf
 %attr(0700,bitcoin,bitcoin) %{_sharedstatedir}/bitcoin
 %attr(0755,root,root) %{_bindir}/bitcoind
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
-%config(noreplace) %{_sysconfdir}/bitcoin.conf
 
 %changelog
 * Sun Jul 14 2019 Evan Klitzke <evan@eklitzke.org> - 0.18.0-1
