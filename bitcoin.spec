@@ -27,6 +27,7 @@ Source11: bitcoind.service
 Source12: bitcoin-qt.desktop
 Source13: bitcoin-qt-testnet.desktop
 
+BuildRequires: doxygen
 BuildRequires: gcc-c++
 BuildRequires: gettext
 BuildRequires: libtool
