@@ -13,7 +13,7 @@
 %endif
 
 Name:    bitcoin
-Version: 0.17.1
+Version: 0.18.0
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -219,6 +219,7 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_mandir}/man1/bitcoin-tx.1*
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
+%attr(0755,root,root) %{_bindir}/bitcoin-wallet
 
 %files -n bitcoind
 %defattr(-,root,root,-)
@@ -231,10 +232,11 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_bindir}/bitcoind
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 %config(noreplace) %{_sysconfdir}/bitcoin.conf
-%exclude %{_datadir}/bitcoin/*.pyc
-%exclude %{_datadir}/bitcoin/*.pyo
 
 %changelog
+* Sun Jul 14 2019 Evan Klitzke <evan@eklitzke.org> - 0.18.0-1
+- Update for Bitcoin 0.18.0
+
 * Sat Mar 16 2019 Evan Klitzke <evan@eklitzke.org> - 0.17.1-1
 - Update for Bitcoin 0.17.1
 
