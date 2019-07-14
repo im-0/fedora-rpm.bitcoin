@@ -11,6 +11,7 @@
 %define guiargs --with-qrencode --with-gui=qt5
 %endif
 %endif
+%global _python_bytecompile_extra 0
 
 Name:    bitcoin
 Version: 0.18.0
