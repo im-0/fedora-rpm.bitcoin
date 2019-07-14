@@ -131,7 +131,7 @@ need this package.
 %make_build
 
 %check
-make check
+export LC_ALL=C.UTF-8 make check
 
 %install
 make install DESTDIR=%{buildroot}
