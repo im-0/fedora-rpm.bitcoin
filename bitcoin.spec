@@ -28,7 +28,6 @@ Source13: bitcoin-qt-testnet.desktop
 
 BuildRequires: gcc-c++
 BuildRequires: gettext
-BuildRequires: glibc-langpack-en
 BuildRequires: libtool
 BuildRequires: make
 BuildRequires: autoconf
