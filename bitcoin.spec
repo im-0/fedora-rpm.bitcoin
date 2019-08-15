@@ -14,7 +14,7 @@
 %global _python_bytecompile_extra 0
 
 Name:    bitcoin
-Version: 0.18.0
+Version: 0.18.1
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -223,6 +223,7 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_bindir}/bitcoin-cli
 %attr(0755,root,root) %{_bindir}/bitcoin-tx
 %attr(0755,root,root) %{_bindir}/bitcoin-wallet
+%attr(0644,root,root) %{_mandir}/man1/bitcoin-wallet.1*
 
 %files -n bitcoind
 %defattr(-,root,root,-)
@@ -236,6 +237,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 
 %changelog
+* Thu Aug 15 2019 Evan Klitzke <evan@eklitzke.org> - 0.18.1-1
+- new version
+
 * Sun Jul 14 2019 Evan Klitzke <evan@eklitzke.org> - 0.18.0-1
 - Update for Bitcoin 0.18.0
 
