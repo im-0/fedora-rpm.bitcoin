@@ -14,7 +14,7 @@
 %global _python_bytecompile_extra 0
 
 Name:    bitcoin
-Version: 0.18.1
+Version: 0.19.1
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -237,6 +237,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 
 %changelog
+* Thu Mar 12 2020 Evan Klitzke <evan@eklitzke.org> - 0.19.1-1
+- Update for Bitcoin 0.19.1
+
 * Thu Aug 15 2019 Evan Klitzke <evan@eklitzke.org> - 0.18.1-1
 - new version
 
