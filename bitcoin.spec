@@ -14,7 +14,7 @@
 %global _python_bytecompile_extra 0
 
 Name:    bitcoin
-Version: 0.19.1
+Version: 0.20.0
 Release: 1%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
@@ -128,6 +128,7 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
+if [[ ! -f ./configure ]]; then ./autogen.sh; fi
 %configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
@@ -237,6 +238,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 
 %changelog
+* Thu Jul 09 2020 Evan Klitzke <evan@eklitzke.org> - 0.20.0-1
+- Update for Bitcoin 0.20.0
+
 * Thu Mar 12 2020 Evan Klitzke <evan@eklitzke.org> - 0.19.1-1
 - Update for Bitcoin 0.19.1
 
