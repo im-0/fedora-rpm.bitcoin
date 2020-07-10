@@ -34,7 +34,6 @@ BuildRequires: libtool
 BuildRequires: make
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: openssl-devel
 BuildRequires: libevent-devel
 BuildRequires: boost-devel
 BuildRequires: miniupnpc-devel
@@ -128,12 +127,12 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
-if [[ ! -f ./configure ]]; then ./autogen.sh; fi
+./autogen.sh
 %configure --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
 %check
-export LC_ALL=C.UTF-8 make check
+LC_ALL=C.UTF-8 make check
 
 %install
 make install DESTDIR=%{buildroot}
