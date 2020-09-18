@@ -15,12 +15,13 @@
 
 Name:    bitcoin
 Version: 0.20.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
 URL:     https://bitcoincore.org/
 Source0: https://bitcoincore.org/bin/%{name}-core-%{version}/%{name}-%{version}.tar.gz
+Source1: https://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
 
 Source10: bitcoin.conf
 Source11: bitcoind.service
@@ -49,8 +50,6 @@ Summary:        Peer to Peer Cryptographic Currency
 Group:          Applications/System
 Obsoletes:      %{name} < %{version}-%{release}
 Provides:       %{name} = %{version}-%{release}
-BuildRequires: libdb4-devel
-BuildRequires: libdb4-cxx-devel
 BuildRequires: qt5-qttools-devel
 BuildRequires: qt5-qtbase-devel
 BuildRequires: protobuf-devel
@@ -127,8 +126,10 @@ need this package.
 %autosetup -n %{name}-%{version}
 
 %build
+./contrib/install_db4.sh "$PWD"
+export BDB_PREFIX="$PWD/db4"
 ./autogen.sh
-%configure --disable-bench %{?walletargs} %{?guiargs}
+%configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-bench %{?walletargs} %{?guiargs}
 %make_build
 
 %check
@@ -237,6 +238,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 
 %changelog
+* Fri Sep 18 2020 Evan Klitzke <evan@eklitzke.org> - 0.20.1-2
+- Use db4 build script in contrib
+
 * Fri Sep 18 2020 Evan Klitzke <evan@eklitzke.org> - 0.20.1-1
 - Update for Bitcoin 0.20.1
 
