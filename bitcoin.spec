@@ -238,7 +238,7 @@ rm -rf %{buildroot}
 
 %changelog
 * Fri Sep 18 2020 Evan Klitzke <evan@eklitzke.org> - 0.20.1-1
-- Update for Bitcoin 0.20.0
+- Update for Bitcoin 0.20.1
 
 * Thu Jul 09 2020 Evan Klitzke <evan@eklitzke.org> - 0.20.0-1
 - Update for Bitcoin 0.20.0
