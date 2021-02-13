@@ -1,8 +1,9 @@
 %if 0%{?_no_wallet}
-%define walletargs --disable-wallet
+%define walletargs --disable-wallet --with-sqlite=no
 %define _buildqt 0
 %define guiargs --with-gui=no
 %else
+%define walletargs --with-sqlite=yes
 %if 0%{?_no_gui}
 %define _buildqt 0
 %define guiargs --with-gui=no
@@ -15,7 +16,7 @@
 
 Name:    bitcoin
 Version: 0.21.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Peer to Peer Cryptographic Currency
 Group:   Applications/System
 License: MIT
@@ -37,6 +38,7 @@ BuildRequires: automake
 BuildRequires: libevent-devel
 BuildRequires: boost-devel
 BuildRequires: miniupnpc-devel
+BuildRequires: sqlite-devel
 
 %description
 Bitcoin is a digital cryptographic currency that uses peer-to-peer technology to
@@ -128,7 +130,7 @@ need this package.
 
 %build
 ./autogen.sh
-%configure --disable-bench %{?walletargs} %{?guiargs}
+%configure --disable-bench --with-boost-process %{?walletargs} %{?guiargs}
 %make_build
 
 %check
@@ -237,6 +239,9 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/bitcoin/rpcauth.py
 
 %changelog
+* Sat Feb 13 2021 Ivan Mironov <mironov.ivan@gmail.com> - 0.21.0-2
+- Enable SQLite and Boost.Process
+
 * Fri Feb 12 2021 Ivan Mironov <mironov.ivan@gmail.com> - 0.21.0-1
 - Update for Bitcoin 0.21.0
 
